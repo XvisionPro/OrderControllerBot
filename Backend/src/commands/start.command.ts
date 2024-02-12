@@ -22,7 +22,9 @@ export class StartCommand extends Command {
                 ['Оформить заказ', 'История заказов']
             ]).resize();
         
-            ctx.reply(`Что вы хотите сделать сегодня? ${ctx.message.chat.id}`,keyboard);
+            // Debug version
+            // ctx.reply(`Что вы хотите сделать сегодня? ${ctx.message.chat.id}`,keyboard);
+            ctx.reply(`Что вы хотите сделать сегодня?`,keyboard);
         });
         
         // Если я правильно помню у нас в БД данные будут о пользователях, оттуда надо подтягивать
