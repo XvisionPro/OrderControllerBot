@@ -1,9 +1,9 @@
 import { Markup, Telegraf } from "telegraf";
 import { Command } from "./command.class";
 import { IBotContext } from "../context/context.interface";
-
+import { dealKeyboard, backKeyboard } from "../components/keyboards";
 /* TODO:
-1. Убрать повторение кода, т.е. написать общий handler для всех товаров
+1. Разделить данный код по файлам
 2. Сделать подгрузку товаров из БД
 3. Добавить место где будет храниться айди исполнителя, чтобы туда ему отстук приходил, а то щас это статика */
 
@@ -12,6 +12,7 @@ export class StartCommand extends Command {
         super(bot);
     }
     handle(): void {
+
         // Кнопка /start
         this.bot.start(async (ctx) => {
             ctx.reply(`Добро пожаловать в DevOrderBot!`);
@@ -36,81 +37,33 @@ export class StartCommand extends Command {
         });
 
         this.bot.hears("Оформить заказ", (ctx) => {
-            ctx.reply('Оформление заказа');
-            ctx.reply('Выберите товар:', Markup.inlineKeyboard([
-                [Markup.button.callback("Товар  1", "deal_1"), Markup.button.callback("Товар  2", "deal_2")],
-                [Markup.button.callback("Товар  3", "deal_3"), Markup.button.callback("Товар  4", "deal_4")],
-                [Markup.button.callback("Товар  5", "deal_5"), Markup.button.callback("Товар 6", "deal_6")],
-                [Markup.button.callback("Поиск 🔍", "search")]
-            ]));
+            ctx.reply('Выберите товар:', dealKeyboard());
         });
-
 
         // Добавить логику поиска
         this.bot.action('search', (ctx) => {
-            ctx.editMessageText('Введите название товара: (не работает)', Markup.inlineKeyboard([
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]));
+            ctx.editMessageText('Введите название товара: (не работает)', backKeyboard(false));
         })
 
-        // Клаву тоже надо где-то записать а то дублируется пиздец
         this.bot.action('back', (ctx) => {
-            ctx.editMessageText('Выберите товар:', Markup.inlineKeyboard([
-                [Markup.button.callback("Товар  1", "deal_1"), Markup.button.callback("Товар  2", "deal_2")],
-                [Markup.button.callback("Товар  3", "deal_3"), Markup.button.callback("Товар  4", "deal_4")],
-                [Markup.button.callback("Товар  5", "deal_5"), Markup.button.callback("Товар 6", "deal_6")],
-                [Markup.button.callback("Поиск 🔍", "search")]
-            ]));
+            ctx.editMessageText('Выберите товар:', dealKeyboard());
         })
 
         // Добавить логику добавления заказа в БД и передачу username в отстук
         this.bot.action('order', (ctx) => {
-            ctx.editMessageText("Спасибо за покупку, Ваш заказ в очереди!\nСкоро мы с Вами свяжемся!", Markup.inlineKeyboard([
-                [Markup.button.callback('Вернуться ко всем товарам', 'back')],
-            ]))
+
+            ctx.editMessageText("Спасибо за покупку, Ваш заказ в очереди!\nСкоро мы с Вами свяжемся!", backKeyboard(false))
             ctx.telegram.sendMessage(5084751842, `Новый заказ!`)
         })
 
-        // Вот для этого handler надо написать
-        this.bot.action('deal_1', (ctx) => {
-            ctx.editMessageText('Информация о товаре №1', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order',)],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-                
-            ]))
-        })
-        this.bot.action('deal_2', (ctx) => {
-            ctx.editMessageText('Информация о товаре №2', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order')],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]))
-        })
-
-        this.bot.action('deal_3', (ctx) => {
-            ctx.editMessageText('Информация о товаре №3', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order')],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]))
-        })
-        this.bot.action('deal_4', (ctx) => {
-            ctx.editMessageText('Информация о товаре №5', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order')],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]))
-        })
-
-        this.bot.action('deal_5', (ctx) => {
-            ctx.editMessageText('Информация о товаре №6', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order')],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]))
-        })
-        this.bot.action('deal_6', (ctx) => {
-            ctx.editMessageText('Информация о товаре №6', Markup.inlineKeyboard([
-                [Markup.button.callback('Оформить заказ', 'order')],
-                [Markup.button.callback('Ко всем товарам', 'back')],
-            ]))
-        })
+        // handler для кнопок с товарами
+        this.bot.action(/^deal_(\d+)$/, (ctx) => {
+            const dealNumber = parseInt(ctx.match[1]);
+        
+            const messageText = `Информация о товаре №${dealNumber}`;
+        
+            ctx.editMessageText(messageText, backKeyboard(true));
+        });
 
     }
 }
