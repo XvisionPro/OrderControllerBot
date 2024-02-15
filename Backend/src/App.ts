@@ -30,19 +30,5 @@ class Bot{
 const bot = new Bot(new ConfigService());
 bot.init();
 
-// Пример использования БД
-
-(async () => {
-    const db = new DataBase();
-    try {
-        await db.connect();
-        const result = await db.query('SELECT NOW()');
-        console.log(result.rows[0]); 
-    } catch (error) {
-        console.error("Error executing query", error);
-    } finally {
-        await db.client.end();
-    }
-})();
 
 
