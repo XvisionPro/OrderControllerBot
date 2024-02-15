@@ -1,22 +1,19 @@
-// DataBase Init
+import { Client } from "pg";
+import { DatabaseService } from "./config/config.database";
 
-import { Client } from "pg"
-import { DatabaseService } from "./config/config.database"
-
-class DataBase{
+export class DataBase {
     client: Client;
     
-    constructor(){
-        const databaseService = new DatabaseService()
-        this.client = new Client(databaseService.get()) 
+    constructor() {
+        const databaseService = new DatabaseService();
+        this.client = new Client(databaseService.get());
     }
 
-    connect(): void {
-        async () => await this.client.connect()
-        }
-}
+    async connect(): Promise<void> {
+        await this.client.connect();
+    }
 
-const db = new DataBase();
-db.connect();
-const result = db.client.query('SELECT NOW()');
-console.log(result);
+    async query(sql: string): Promise<any> {
+        return await this.client.query(sql);
+    }
+}

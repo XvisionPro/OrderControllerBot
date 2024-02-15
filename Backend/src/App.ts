@@ -7,6 +7,7 @@ import { StartCommand } from "./commands/start.command";
 import LocalSession from "telegraf-session-local";
 import { ProfileCommand } from "./commands/profile.command";
 import { OrderCommand } from "./commands/order.command";
+import { DataBase } from "./Database";
 
 class Bot{
     bot: Telegraf<IBotContext>;
@@ -26,8 +27,17 @@ class Bot{
     }
 }
 
-
-
-const bot = new Bot(new ConfigService());
-bot.init();
+// Пример использования БД
+(async () => {
+    const db = new DataBase();
+    try {
+        await db.connect();
+        const result = await db.query('SELECT NOW()');
+        console.log(result.rows[0]); 
+    } catch (error) {
+        console.error("Error executing query", error);
+    } finally {
+        await db.client.end(); 
+    }
+})();
 
