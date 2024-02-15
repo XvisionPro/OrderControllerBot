@@ -27,7 +27,11 @@ class Bot{
     }
 }
 
+const bot = new Bot(new ConfigService());
+bot.init();
+
 // Пример использования БД
+
 (async () => {
     const db = new DataBase();
     try {
@@ -37,7 +41,8 @@ class Bot{
     } catch (error) {
         console.error("Error executing query", error);
     } finally {
-        await db.client.end(); 
+        await db.client.end();
     }
 })();
+
 
