@@ -11,7 +11,15 @@ function Leftsidebar() {
 
     return(
         <section className="custom-scrollbar leftsidebar">
-            <div className="flex w-full flex-1 flex-col gap-6 px-6">
+            <div className="flex w-full px-5 gap-6">
+                <Image
+                    src='/'
+                    alt=""
+                    width={48}
+                    height={48}
+                />
+            </div>
+            <div className="flex w-full  flex-col gap-6 px-5">
                 {sidebarLinks.map((link)=> {
                     const isAsctive = (pathname.includes
                         (link.route) && link.route.length > 1

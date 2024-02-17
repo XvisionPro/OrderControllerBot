@@ -14,6 +14,14 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --ui_bg000: #15161b;
+    --ui_bg100: #939bb0;
+    --ui_bg200: #393f4f;
+    --ui_bg300: #2b2f3a;
+    --ui_bg400: #232429;
+    --ui_bg500: #1c1c24;
+    --ui_bg600: #15161b;
+    --ui_bg700: #3aa8b5;
   }
 }
 
@@ -21,7 +29,7 @@ body {
   @apply text-base overflow-hidden;
   font-family: var(--font-zen), sans-serif;
   color: rgb(var(--foreground-rgb));
-  background-color: #0e0f0f;
+  background-color: var(--ui_bg600);
 
   @media (max-width: 1200px) {
       font-size: 16px;
@@ -35,21 +43,36 @@ body {
 input.defaultCheckBox {
   color: white;
 }
+.maincontainer{
+  @apply h-screen w-full
+}
 
 .topbar{
   @apply fixed top-0 z-30 flex w-full
   items-center justify-between bg-neutral-800 px-6
   py-3;
 }
-
+.leftside{
+  @apply flex
+}
 .leftsidebar {
+  background-color: var(--ui_bg600);
+
   @apply sticky left-0 top-0 z-20 flex h-screen w-fit 
-  flex-col justify-between overflow-auto border-r border-r-neutral-800
-  bg-neutral-800 pb-5 pt-28 max-md:hidden;
+  flex-col justify-between overflow-auto pb-10 pt-3
+  max-md:hidden;
 }
 
 .leftsidebar_link {
   @apply relative flex justify-start gap-4 rounded-lg p-4;
+}
+
+.leftcontentbar{
+  background-color: var(--ui_bg500);
+  height: -webkit-fill-available;
+
+  @apply sticky left-0 top-0 rounded-3xl flex  w-96 min-w-44 
+  p-5 max-md:hidden m-3
 }
 
 @layer utilities {

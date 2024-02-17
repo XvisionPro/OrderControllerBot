@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import Topbar from "@/components/shared/Topbar";
 import Leftsidebar from "@/components/shared/Leftsidebar";
+import Leftcontentbar from "@/components/shared/Leftcontentbar";
 import Rightsidebar from "@/components/shared/Rightsidebar";
 import Bottombar from "@/components/shared/Bottombar";
 import { SITE_NAME } from "@/constants/seo.constants";
@@ -26,14 +26,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
-        <Topbar />
         <main>
-          <Leftsidebar />
+          <section className="leftside">
+            <Leftsidebar />
+            <Leftcontentbar />
+          </section>
+          <Providers>{children}</Providers>
 
           <section className="main-conatiner">
             <div className="w-full max-w-4x1">
-              {children}
             </div>
           </section>
 
