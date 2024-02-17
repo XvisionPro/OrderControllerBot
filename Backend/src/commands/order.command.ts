@@ -32,12 +32,53 @@ export class OrderCommand extends Command {
             ctx.reply('Выберите товар:', dealKeyboard(services));
         });
         
-        // Добавить логику поиска
-        // this.bot.action('search', (ctx) => {
-        //     ctx.editMessageText('Введите название товара: (не работает)', backKeyboard(false));
+        // this.bot.use(async (ctx, next) => {
+        //     console.time(`Processing update ${ctx.update.update_id}`);
+        //     await next() // runs next middleware
+        //     // runs after next middleware finishes
+        //     console.timeEnd(`Processing update ${ctx.update.update_id}`);
         // })
 
-        // Initialize an object to store the state of each user
+        this.bot.hears('История заказов', async (ctx) => {
+            const userId = ctx.from?.id; // Получаем ID пользователя из контекста
+            if (!userId) {
+                ctx.reply("Не удалось получить ID пользователя.");
+                return;
+            }
+            
+            const page = 1
+
+            try {
+                // Получаем историю заказов для пользователя с пагинацией
+                const { orders, totalOrders } = await this.db.showOrdersHistory(userId, page);
+                // Форматируем результаты для отправки пользователю
+                let message = "<b>История заказов:</b>\n";
+                orders.forEach((order, index) => {
+                    message += `\n<b>Заказ ${totalOrders - order.id + 1}:</b>\n`;
+                    message += `Услуга: ${order.service_id}\n`;
+                    const orderDate = new Date(order.order_date);
+                    const formattedDate = orderDate.toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    message += `Дата заказа: ${formattedDate}\n`;
+                });
+                
+                // Вычисляем общее количество страниц
+                const totalPages = Math.ceil(totalOrders / pageSize);   
+                const pagination = paginationKeyboard(page, totalPages);
+                // Используем pagination для отправки сообщения с клавиатурой
+                ctx.replyWithHTML(message, {reply_markup: {inline_keyboard:[pagination]}});
+            } 
+            catch (error) 
+            {
+                console.error('Ошибка при получении истории заказов:', error);
+                ctx.reply("Произошла ошибка при получении истории заказов.");
+            }
+        });
 
         this.bot.action('search', (ctx) => {
             // Проверка для TypeScript

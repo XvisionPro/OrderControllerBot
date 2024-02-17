@@ -1,6 +1,8 @@
 import { Command } from "./command.class";
 import { paginationKeyboard } from "../components/keyboards";
 import { DataBase } from "../Database";
+import { InlineKeyboardMarkup } from "telegraf/typings/core/types/typegram";
+import { Markup} from "telegraf";
 
 const pageSize =  3; // Количество заказов на одной странице
 
@@ -12,50 +14,7 @@ export class historyOrdersCommand extends Command {
     }
 
     async handle(): Promise<void> {
-        console.log('1');
-        
-        this.bot.hears('История заказов', async (ctx) => {
-            console.log('2');
-            const userId = ctx.from?.id; // Получаем ID пользователя из контекста
-            if (!userId) {
-                ctx.reply("Не удалось получить ID пользователя.");
-                return;
-            }
-            
-            const page = 1
-
-            try {
-                console.log('Хуй');
-                // Получаем историю заказов для пользователя с пагинацией
-                const { orders, totalOrders } = await this.db.showOrdersHistory(userId, page);
-                // Форматируем результаты для отправки пользователю
-                let message = "<b>История заказов:</b>\n";
-                orders.forEach((order, index) => {
-                    message += `\n<b>Заказ ${index +   1}:</b>\n`;
-                    message += `Услуга: ${order.service_id}\n`;
-                    const orderDate = new Date(order.order_date);
-                    const formattedDate = orderDate.toLocaleString('ru-RU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    message += `Дата заказа: ${formattedDate}\n`;
-                });
-                
-                // Вычисляем общее количество страниц
-                const totalPages = Math.ceil(totalOrders / pageSize);   
-
-                // Используем pagination для отправки сообщения с клавиатурой
-                ctx.replyWithHTML(message, paginationKeyboard(page, totalPages));
-            } 
-            catch (error) 
-            {
-                console.error('Ошибка при получении истории заказов:', error);
-                ctx.reply("Произошла ошибка при получении истории заказов.");
-            }
-        });
+        // console.log('1');
         
         this.bot.action(/^orders_(\d+)$/, async (ctx) => {
             // Проверка для TypeScript
@@ -73,9 +32,9 @@ export class historyOrdersCommand extends Command {
     
                 const totalPages = Math.ceil(totalOrders / pageSize);
     
-                let message = "История заказов:\n";
+                let message = "<b>История заказов:</b>\n";
                 orders.forEach((order, index) => {
-                    message += `\nЗаказ ${index +   1}:\n`;
+                    message += `\n<b>Заказ ${totalOrders - order.id + 1}:</b>\n`;
                     message += `Услуга: ${order.service_id}\n`;
                     const orderDate = new Date(order.order_date);
                     const formattedDate = orderDate.toLocaleString('ru-RU', {
@@ -89,8 +48,8 @@ export class historyOrdersCommand extends Command {
                 });
     
                 const pagination = paginationKeyboard(page, totalPages);
-    
-                ctx.editMessageText(message, pagination);
+
+                ctx.editMessageText(message, {reply_markup: {inline_keyboard:[pagination]}, parse_mode: 'HTML'});
             } catch (error) {
                 console.error('Ошибка при обработке запроса пагинации:', error);
                 ctx.answerCbQuery('Произошла ошибка при обработке запроса пагинации.');
