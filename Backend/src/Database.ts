@@ -7,23 +7,10 @@ export class DataBase {
     constructor() {
         const databaseService = new DatabaseService();
         this.client = new Client(databaseService.get());
+        this.client.connect(); // Подключаем клиент один раз при инициализации
     }
 
-    async connect(): Promise<void> {
-        await this.client.connect();
-    }
-
-    async end(): Promise<void> {
-        try {
-            await this.client.end();
-            console.log('Соединение закрыто');
-        } catch (error) {
-            console.error('Не получилось закрыть соединение:', error);
-            throw error;
-        }
-    }
-
-    async query(sql: string,  params?: any[]): Promise<any> {
+    async query(sql: string, params?: any[]): Promise<any> {
         return await this.client.query(sql, params);
     }
 
@@ -35,22 +22,31 @@ export class DataBase {
             console.error('Ошибка при получении услуг:', error);
             throw error;
         }
-    }      
+    }
 
     async searchServicesByName(searchTerm: string): Promise<any[]> {
-        const result = await this.query(`SELECT * FROM "Услуга" WHERE name LIKE ${searchTerm}`);
-        return result.rows;
+        try {
+            const result = await this.query(`SELECT * FROM "Услуга" WHERE name LIKE $1`, [`%${searchTerm}%`]);
+            return result.rows;
+        } catch (error) {
+            console.error('Ошибка при поиске услуг по имени:', error);
+            throw error;
+        }
     }
 
     async fetchServiceById(id: number): Promise<any> {
-        const result = await this.query(`SELECT * FROM "Услуга" WHERE id = ${id}`,);
-        return result.rows[0];
+        try {
+            const result = await this.query(`SELECT * FROM "Услуга" WHERE id = $1`, [id]);
+            return result.rows[0];
+        } catch (error) {
+            console.error('Ошибка при получении услуги по ID:', error);
+            throw error;
+        }
     }
-    
-    // Получение User
+
     async getUserFromDb(telegramId: number): Promise<any> {
         try {
-            const result = await this.query(`SELECT * FROM "Заказчик" WHERE telegram_id = ${telegramId}`);
+            const result = await this.query(`SELECT * FROM "Заказчик" WHERE telegram_id = $1`, [telegramId]);
             return result.rows[0];
         } catch (error) {
             console.error('Не получилось получить заказчика из БД:', error);
@@ -58,7 +54,6 @@ export class DataBase {
         }
     }
 
-    // Добавление User
     async insertNewUser(telegramId: number, firstName: string, lastName: string, username: string): Promise<void> {
         try {
             await this.query(`INSERT INTO "Заказчик" (telegram_id, first_name, last_name, username) VALUES ($1, $2, $3, $4)`, [telegramId, firstName, lastName, username]);
@@ -67,8 +62,7 @@ export class DataBase {
             throw error;
         }
     }
-    
-    // Обновление User
+
     async updateUser(telegramId: number, firstName: string, lastName: string, username: string): Promise<void> {
         try {
             await this.query(`UPDATE "Заказчик" SET first_name = $2, last_name = $3, username = $4 WHERE telegram_id = $1`, [telegramId, firstName, lastName, username]);
@@ -78,20 +72,27 @@ export class DataBase {
         }
     }
 
-    // Создание нового заказа
     async createNewOrder(clientId: number, serviceId: number): Promise<void> {
         try {
-            await this.query(`INSERT INTO "Заказ" (client_id, service_id, status) VALUES ($1, $2, 'new')`, [clientId, serviceId]);
+            const clientExists = await this.query(`SELECT id FROM "Заказчик" WHERE telegram_id = $1`, [clientId]);
+            if (!clientExists.rows.length) {
+                await this.query(`INSERT INTO "Заказчик" (id) VALUES ($1)`, [clientId]);
+            } else {
+                clientId = clientExists.rows[0].id;
+            }
+            const insertOrderResult = await this.query(`INSERT INTO "Заказ" (client_id, service_id, status) VALUES ($1, $2, 'new') RETURNING id`, [clientId, serviceId]);
+            return insertOrderResult.rows[0].id;
         } catch (error) {
             console.error('Не получилось добавить заказ:', error);
             throw error;
         }
     }
 
-    // Подсчёт заказов
     async countOrdersForUser(userId: number): Promise<number> {
         try {
-            const result = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [userId]);
+            const clientExists = await this.query(`SELECT id FROM "Заказчик" WHERE telegram_id = $1`, [userId]);
+            const clientId = clientExists.rows[0].id;
+            const result = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [clientId]);
             return parseInt(result.rows[0].count);
         } catch (error) {
             console.error('Не получилось подсчитать кол-во заказов:', error);
@@ -99,4 +100,30 @@ export class DataBase {
         }
     }
 
+    async showOrdersHistory(userId: number, page: number =  1, pageSize: number =  3): Promise<{ orders: any[], totalOrders: number }> {
+        try {
+            const clientExists = await this.query(`SELECT id FROM "Заказчик" WHERE telegram_id = $1`, [userId]);
+            if (!clientExists.rows.length) {
+                throw new Error("Клиент не найден.");
+            }
+            const clientId = clientExists.rows[0].id;
+            const orders = await this.query(`SELECT * FROM "Заказ" WHERE client_id = $1 ORDER BY order_date DESC LIMIT $2 OFFSET $3`, [clientId, pageSize, (page -  1) * pageSize]);
+            const totalOrdersResult = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [clientId]);
+            const totalOrders = parseInt(totalOrdersResult.rows[0].count,  10);
+            return { orders: orders.rows, totalOrders };
+        } catch (error) {
+            console.error('Ошибка при получении истории заказов:', error);
+            throw error;
+        }
+    }
+
+    async end(): Promise<void> {
+        try {
+            await this.client.end();
+            console.log('Соединение закрыто');
+        } catch (error) {
+            console.error('Не получилось закрыть соединение:', error);
+            throw error;
+        }
+    }
 }

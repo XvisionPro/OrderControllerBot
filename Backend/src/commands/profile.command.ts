@@ -10,7 +10,7 @@ export class ProfileCommand extends Command {
     }
 
     async handle(): Promise<void> {
-        await this.db.connect();
+
         this.bot.hears("Профиль 👤", async (ctx) => {
             const userId = ctx.message.from.id;
             const userFirstName = ctx.message.from.first_name;

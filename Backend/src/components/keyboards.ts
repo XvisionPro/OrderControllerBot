@@ -1,6 +1,7 @@
 import { Markup} from "telegraf";
 import { Service } from "../entities/Service";
 
+
 export const dealKeyboard = (services:Array<Service>) => {
     const groupedServices = [];
     for (let i =  0; i < services.length; i +=  2) {
@@ -32,3 +33,21 @@ export const backKeyboard = (order:boolean) => {
         )
     }
 }
+
+export const paginationKeyboard = (currentPage: number, totalPages: number) => {
+    const buttons = [];
+
+    console.log(`Current page: ${currentPage}, Total pages: ${totalPages}`); // Add this line
+
+    if (currentPage >  1) {
+        buttons.push(Markup.button.callback('Предыдущая страница', `orders_${currentPage -  1}`));
+    }
+
+    if (currentPage < totalPages) {
+        buttons.push(Markup.button.callback('Следующая страница', `orders_${currentPage +  1}`));
+    }
+
+    console.log(buttons);
+    return Markup.inlineKeyboard(buttons);
+};
+

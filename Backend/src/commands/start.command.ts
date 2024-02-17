@@ -1,7 +1,6 @@
 import { Markup, Telegraf } from "telegraf";
 import { Command } from "./command.class";
 import { IBotContext } from "../context/context.interface";
-import { Pool } from 'pg'; // Assuming you're using PostgreSQL
 import { DataBase } from "../Database";
 
 export class StartCommand extends Command {
@@ -13,7 +12,6 @@ export class StartCommand extends Command {
     }
 
     async handle(): Promise<void> {
-        await this.db.connect();
         
         this.bot.start(async (ctx) => {
             const user = ctx.from;
@@ -44,7 +42,8 @@ export class StartCommand extends Command {
 
             const keyboard = Markup.keyboard([
                 ['Профиль 👤'],
-                ['Оформить заказ', 'История заказов']
+                ['Оформить заказ'],
+                ['История заказов']
             ]).resize();
 
             ctx.reply(`Что вы хотите сделать сегодня?`, keyboard);

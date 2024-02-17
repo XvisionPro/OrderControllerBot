@@ -7,11 +7,11 @@ import { StartCommand } from "./commands/start.command";
 import LocalSession from "telegraf-session-local";
 import { ProfileCommand } from "./commands/profile.command";
 import { OrderCommand } from "./commands/order.command";
-import { DataBase } from "./Database";
+import { historyOrdersCommand } from "./commands/history.command";
 
 class Bot{
     bot: Telegraf<IBotContext>;
-    commands: Command[] = []
+    commands: Command[] = [];
 
     constructor(private readonly configService: IConfigService) {
         this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"));
@@ -19,10 +19,17 @@ class Bot{
     }
 
     init(){
-        this.commands = [new StartCommand(this.bot), new ProfileCommand(this.bot), new OrderCommand(this.bot)];
+        this.commands = [
+            new StartCommand(this.bot),
+            new ProfileCommand(this.bot),
+            new OrderCommand(this.bot),
+            new historyOrdersCommand(this.bot),
+        ];
+
         for(const command of this.commands){
             command.handle();
         }
+
         this.bot.launch();
     }
 }
