@@ -3,5 +3,5 @@ export type Service = {
     name: string;
     description: string | null;
     price: number;
-    imagePath: string | null;
+    image_path: string | null;
 };

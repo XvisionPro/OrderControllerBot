@@ -29,15 +29,8 @@ export class OrderCommand extends Command {
 
         this.bot.hears("Оформить заказ", async (ctx) => {
             const services: Service[] = await this.db.fetchServices();
-            ctx.reply('Выберите товар:', dealKeyboard(services));
+            ctx.replyWithPhoto('https://i.pinimg.com/564x/da/40/4b/da404bf7bd4398c9f256c65507d3c860.jpg', {caption: 'Выберите товар:', reply_markup:{inline_keyboard: dealKeyboard(services)}});
         });
-        
-        // this.bot.use(async (ctx, next) => {
-        //     console.time(`Processing update ${ctx.update.update_id}`);
-        //     await next() // runs next middleware
-        //     // runs after next middleware finishes
-        //     console.timeEnd(`Processing update ${ctx.update.update_id}`);
-        // })
 
         this.bot.hears('История заказов', async (ctx) => {
             const userId = ctx.from?.id; // Получаем ID пользователя из контекста
@@ -106,11 +99,12 @@ export class OrderCommand extends Command {
                             };
                         });
         
-                        ctx.reply('Найденные товары:', {
+                        ctx.replyWithPhoto('https://top-fon.com/uploads/posts/2023-01/1675106599_top-fon-com-p-foto-dlya-prezentatsii-bez-fona-218.jpg', { 
+                            caption: 'Найденные товары',
                             reply_markup: {
                                 inline_keyboard: [inlineKeyboard]
                             }
-                        });
+                        },);
                     } else {
                         ctx.reply('Товары не найдены.');
                     }
@@ -126,7 +120,8 @@ export class OrderCommand extends Command {
         // Возвращение на просмотр
         this.bot.action('back', async (ctx) => {
             const services: Service[] = await this.db.fetchServices();
-            ctx.editMessageText('Выберите товар:', dealKeyboard(services));
+            await ctx.editMessageMedia({media: 'https://i.pinimg.com/564x/da/40/4b/da404bf7bd4398c9f256c65507d3c860.jpg', type: "photo"});
+            await ctx.editMessageCaption('Выберите товар:', {reply_markup:{inline_keyboard: dealKeyboard(services)}});
         })
         
         // Оформление заказа
@@ -159,7 +154,7 @@ export class OrderCommand extends Command {
                 ctx.telegram.sendMessage(ownerService.get(), messageToOwner, {parse_mode: 'HTML'});
 
                 // Сообщение заказчику
-                ctx.editMessageText("Спасибо за покупку, Ваш заказ в очереди!\nСкоро мы с Вами свяжемся!", backKeyboard(false));
+                ctx.editMessageCaption("Спасибо за покупку, Ваш заказ в очереди!\nСкоро мы с Вами свяжемся!", backKeyboard(false));
 
             } catch (error) {
                 console.error('Не получилось создать заказ:', error);
@@ -181,8 +176,18 @@ export class OrderCommand extends Command {
 
             selectedServiceIds[ctx.from.id] = serviceId;
 
-            const messageText = `Информация об услуге: ${serviceDetails.name}\nЦена: ${serviceDetails.price}\nОписание: ${serviceDetails.description || 'Нет описания'}`;
-            ctx.editMessageText(messageText, backKeyboard(true));
+            const messageText = `Услуга: ${serviceDetails.name}\n\nЦена: ${serviceDetails.price}\n\nОписание: ${serviceDetails.description || 'Нет описания'}`;
+            
+            const imageUrl = serviceDetails.image_path;
+            if (imageUrl) {
+                await ctx.editMessageMedia({media: imageUrl, type: "photo"});
+                await ctx.editMessageCaption(messageText, backKeyboard(true));
+            } 
+            else {
+                await ctx.editMessageCaption(messageText, backKeyboard(true));
+                // console.error('Нет URL изображения для услуги');
+            }
+            
 
         });
 

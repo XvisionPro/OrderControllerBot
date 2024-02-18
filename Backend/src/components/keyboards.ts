@@ -13,11 +13,12 @@ export const dealKeyboard = (services:Array<Service>) => {
 
     groupedServices.push([Markup.button.callback("Поиск 🔍", "search")]);
 
-    return Markup.inlineKeyboard(groupedServices);
+    return groupedServices;
 };
 
 export const backKeyboard = (order:boolean) => {
     if (!order){
+        const buttons = []
     return (
         Markup.inlineKeyboard([
             [Markup.button.callback('Вернуться ко всем товарам', 'back')],

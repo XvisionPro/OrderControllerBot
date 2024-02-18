@@ -2,6 +2,7 @@ import { Markup, Telegraf } from "telegraf";
 import { Command } from "./command.class";
 import { IBotContext } from "../context/context.interface";
 import { DataBase } from "../Database";
+const sharp = require('sharp');
 
 export class StartCommand extends Command {
     private db: DataBase;
@@ -37,7 +38,7 @@ export class StartCommand extends Command {
                 await this.db.updateUser(telegramId, firstName, lastName, username);
             }
 
-            ctx.reply(`Добро пожаловать в DevOrderBot, ${existingUser.first_name}!`);
+            ctx.replyWithPhoto('https://disk.yandex.com.am/i/SGPFMFPWJaNdyQ' ,{caption: `Добро пожаловать в DevOrderBot, ${existingUser.first_name}!`});
             await new Promise((resolve) => setTimeout(resolve,  500));
 
             const keyboard = Markup.keyboard([
