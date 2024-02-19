@@ -1,10 +1,10 @@
 .maincontainer{
-    @apply sticky h-screen w-fit left-0 top-0 rounded-3xl flex min-w-44 
+    @apply sticky h-screen w-fit left-0 top-0 flex
     p-2 pl-0 max-md:hidden;
 }
 
 .leftcontentbar {
-    @apply sticky w-96 rounded-3xl flex max-md:hidden;
+    @apply sticky w-fit rounded-3xl flex max-md:hidden min-w-80 flex-col;
     background-color: var(--ui_bg500);
     height: -webkit-fill-available;
 }

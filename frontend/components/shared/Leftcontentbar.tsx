@@ -7,10 +7,17 @@ function Leftcontentbar() {
         <div className="maincontainer">
             <section className="leftcontentbar">
                 <div className="contenttitle">
-                    <div className="mainwrapper">
+                    <h1 className="mainwrapper">
                         {SITE_NAME}
-                    </div>
+                    </h1>
                 </div>
+                <nav className="contentnav mainwrapper">
+                    <ul className="contentnav__list">
+                        <li className="contentnav__list-item">Item1</li>
+                        <li className="contentnav__list-item">Item2</li>
+                        <li className="contentnav__list-item">Item3</li>
+                    </ul>
+                </nav>
             </section>
         </div>
     )

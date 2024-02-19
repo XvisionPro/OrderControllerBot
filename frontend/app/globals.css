@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '../styles/Leftcontentbar';
+@import '../styles/root/Leftcontentbar';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 
@@ -61,7 +61,7 @@
 }
 
 body {
-  @apply text-base overflow-hidden;
+  @apply text-base;
   font-family: var(--font-zen), sans-serif;
   color: rgb(var(--foreground-rgb));
   background-color: var(--ui_bg600);
@@ -75,8 +75,22 @@ body {
   }
 }
 
+h1{
+  font-size: 28px;
+  font-weight: 600;
+}
+
+h2{
+  font-size: 20px;
+  font-weight: 600;
+}
+
 input.defaultCheckBox {
   color: white;
+}
+
+.main-container{
+  @apply relative p-2 w-full h-screen;
 }
 
 .icon{
@@ -87,6 +101,12 @@ input.defaultCheckBox {
 .mainwrapper{
   @apply p-5;
 }
+
+.content__wrapper{
+  background-color: var(--ui_bg500);
+  @apply rounded-3xl;
+}
+
 .leftsideicon{
   font-size: 30px;
 }
@@ -101,19 +121,19 @@ input.defaultCheckBox {
 .leftsidebar {
   /* background-color: var(--ui_bg600); */
 
-  @apply sticky left-0 top-0 z-20 flex h-screen w-fit 
-  flex-col justify-between overflow-auto pb-3 pt-3 pr-2
+  @apply sticky left-0 top-0 z-20 flex h-screen
+  flex-col justify-between overflow-auto pb-3 pt-3 w-28 min-w-24
   max-md:hidden;
 }
 
 .leftsidebar__link {
   color: var(--ui_bg100);
-  transition: all .2s ease;
-  @apply relative flex gap-4 rounded-full p-3 h-fit w-fit;
+  transition: all .1s ease;
+  @apply relative flex rounded-full p-3 h-fit w-fit;
 }
 
 .leftsidebar__link:hover {
-  transition: 500ms;
+  transition: all .1s ease;
   background-color: var(--ui_bg700);
   color: white;
 }
@@ -148,4 +168,9 @@ input.defaultCheckBox {
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #7878a3;
   }
+}
+
+.test{
+  height: 5000px;
+  background: #000;
 }

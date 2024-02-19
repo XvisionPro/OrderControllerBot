@@ -8,9 +8,9 @@ export const sidebarLinks = [
 
     {
         imgURL: "/",
-        route: "/none",
-        label: "None",
-        icon: "block",
+        route: "/profile",
+        label: "Профиль",
+        icon: "person",
     },
 
     {

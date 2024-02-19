@@ -1,7 +1,10 @@
 export default function Home() {
   return (
-    <main>
-      <h1 className="head-text text-left">Главная</h1>
-    </main>
+    <>
+        <div className="content__wrapper mainwrapper">
+          <h2 className="">Главная</h2>
+        </div>
+        Контент
+      </>
   );
 }

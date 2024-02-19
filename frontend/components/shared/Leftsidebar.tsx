@@ -13,14 +13,14 @@ function Leftsidebar() {
 
     return(
         <section className="custom-scrollbar leftsidebar">
-            <div className="flex w-full px-3 gap-6 justify-center ">
+            <div className="flex w-full justify-center">
                 <Link
                     href='/'
                 >
                     <DisplaySettingsOutlinedIcon className="icon"/>
                 </Link>
             </div>
-            <div className="flex  flex-col gap-3 px-3">
+            <div className="flex  flex-col gap-5 px-3 justify-center">
                 {sidebarLinks.map((link)=> {
                     const isAsctive = (pathname.includes
                         (link.route) && link.route.length > 1

@@ -24,24 +24,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main>
-          <section className="leftside">
-            <Leftsidebar />
-            <Leftcontentbar />
-          </section>
-          <Providers>{children}</Providers>
-
-          <section className="main-conatiner">
-            <div className="w-full max-w-4x1">
-            </div>
-          </section>
-
-          <Rightsidebar />
-        </main>
-        <Bottombar />
-      </body>
-    </html>
+    <>
+      <html lang="en">
+        <body className={inter.className}>
+          <main>
+            <section className="leftside">
+              <Leftsidebar />
+              <Leftcontentbar />
+              <section className="main-container">
+                <div>
+                  {children}
+                </div>
+              </section>
+            </section>
+          </main>
+        </body>
+      </html>
+    </>
   );
 }
