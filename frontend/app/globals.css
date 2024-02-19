@@ -82,13 +82,13 @@ input.defaultCheckBox {
 .icon{
   /* width: 48px;
   height: 48px; */
-  font-size: 64px;
+  font-size: 60px;
 }
 .mainwrapper{
   @apply p-5;
 }
 .leftsideicon{
-  font-size: 36px;
+  font-size: 30px;
 }
 .topbar{
   @apply fixed top-0 z-30 flex w-full
@@ -102,13 +102,13 @@ input.defaultCheckBox {
   /* background-color: var(--ui_bg600); */
 
   @apply sticky left-0 top-0 z-20 flex h-screen w-fit 
-  flex-col justify-between overflow-auto pb-10 pt-3 pr-2
+  flex-col justify-between overflow-auto pb-3 pt-3 pr-2
   max-md:hidden;
 }
 
 .leftsidebar__link {
   color: var(--ui_bg100);
-  transition: all .1s ease;
+  transition: all .2s ease;
   @apply relative flex gap-4 rounded-full p-3 h-fit w-fit;
 }
 
