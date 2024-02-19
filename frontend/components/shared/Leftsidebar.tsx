@@ -2,8 +2,10 @@
 
 import {sidebarLinks} from "@/constants/index";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+
+// Icons
+import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
 
 function Leftsidebar() {
     const router = useRouter();
@@ -11,15 +13,14 @@ function Leftsidebar() {
 
     return(
         <section className="custom-scrollbar leftsidebar">
-            <div className="flex w-full px-5 gap-6">
-                <Image
-                    src='/'
-                    alt=""
-                    width={48}
-                    height={48}
-                />
+            <div className="flex w-full px-3 gap-6 justify-center ">
+                <Link
+                    href='/'
+                >
+                    <DisplaySettingsOutlinedIcon className="icon"/>
+                </Link>
             </div>
-            <div className="flex w-full  flex-col gap-6 px-5">
+            <div className="flex  flex-col gap-3 px-3">
                 {sidebarLinks.map((link)=> {
                     const isAsctive = (pathname.includes
                         (link.route) && link.route.length > 1
@@ -30,17 +31,12 @@ function Leftsidebar() {
                                 <Link 
                                     href={link.route}
                                     key={link.label}
-                                    className={`leftsidebar_link ${isAsctive && 'bg-blue-500'}`}
+                                    className={`leftsidebar__link ${isAsctive && 'leftsidebar__link-active'}`}
                                 >
-                                    <Image
-                                        src={link.imgURL}
-                                        alt={link.label}
-                                        width={24}
-                                        height={24}
-                                    />
-                                    <p className="text-light-1 max-lg:hidden">
+                                    <span className="material-icons leftsideicon">{link.icon}</span>
+                                    {/* <p className="text-light-1 max-lg:hidden">
                                         {link.label}
-                                    </p>
+                                    </p> */}
                                 </Link>
                         </div> 
                     )}

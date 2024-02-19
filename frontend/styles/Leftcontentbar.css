@@ -1,0 +1,17 @@
+.maincontainer{
+    @apply sticky h-screen w-fit left-0 top-0 rounded-3xl flex min-w-44 
+    p-2 pl-0 max-md:hidden;
+}
+
+.leftcontentbar {
+    @apply sticky w-96 rounded-3xl flex max-md:hidden;
+    background-color: var(--ui_bg500);
+    height: -webkit-fill-available;
+}
+
+.contenttitle{
+    font-family:'Inter', sans-serif;
+    border-color: var(--ui_bg300);
+    @apply relative h-fit w-full border-b-2
+    text-3xl;
+}
