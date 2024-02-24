@@ -21,3 +21,18 @@ export const sidebarLinks = [
     },
 
 ]
+
+export const sidebarContent = [
+    {
+        imgURL: "/",
+        route: "/",
+        label: "Dashboard",
+        icon: "home",
+    },
+    {
+        imgURL: "/",
+        route: "/orders",
+        label: "Orders",
+        icon: "assignment",
+    },
+]

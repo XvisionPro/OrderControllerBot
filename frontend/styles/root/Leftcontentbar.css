@@ -10,8 +10,25 @@
 }
 
 .contenttitle{
-    font-family:'Inter', sans-serif;
     border-color: var(--ui_bg300);
     @apply relative h-fit w-full border-b-2
     text-3xl;
+}
+
+.contentnav__list{
+    @apply flex flex-col;
+}
+
+.contentnav__list-item{
+    @apply py-1;
+}
+
+.contentnav__list-link{
+    color: var(--text_light);
+    @apply flex gap-3 items-center text-lg py-3 px-3;
+}
+
+.contentnav__list-link-active{
+    background-color: var(--ui_bg300);
+    @apply rounded-3xl
 }
