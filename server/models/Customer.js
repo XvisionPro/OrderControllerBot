@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize"
 import sequelize from "../database.js"
+import Order from "./Order.js";
 
 
 const Customer = sequelize.define(
@@ -39,6 +40,9 @@ const Customer = sequelize.define(
 
 // `sequelize.define` возвращает модель
 Customer.sync();
+Customer.hasMany(Order,{
+  foreignKey: 'service_id'
+});
 console.log(Customer === sequelize.models.Customer) // true
 
 

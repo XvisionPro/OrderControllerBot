@@ -14,11 +14,8 @@ import sequelize from "./database.js";
 // data imports
 import Customer from "./models/Customer.js";
 import Service from "./models/Service.js";
-import Product from "./models/Product.js";
-import ProductStat from "./models/ProductStat.js";
-import Transaction from "./models/Transaction.js";
-import OverallStat from "./models/OverallStat.js";
-import AffiliateStat from "./models/AffiliateStat.js";
+import Order from "./models/Order.js";
+
 import {
   dataUser,
   dataProduct,
@@ -46,4 +43,6 @@ app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 app.listen(3000);
 
+Order.belongsTo(Customer);
+Order.belongsTo(Service);
 
