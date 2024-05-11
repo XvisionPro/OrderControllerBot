@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
@@ -10,9 +9,10 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 import pg from 'pg';
+import sequelize from "./database.js";
 
 // data imports
-import User from "./models/User.js";
+import Customer from "./models/Customer.js";
 import Product from "./models/Product.js";
 import ProductStat from "./models/ProductStat.js";
 import Transaction from "./models/Transaction.js";
@@ -39,50 +39,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 /* ROUTES */
-app.use("/client", clientRoutes);
+app.use("/customer", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+app.listen(3000);
 
-/* MONGOOSE SETUP */
-// mongoose
-//   .connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-//     /* ONLY ADD DATA ONE TIME */
-//     // AffiliateStat.insertMany(dataAffiliateStat);
-//     // OverallStat.insertMany(dataOverallStat);
-//     // Product.insertMany(dataProduct);
-//     // ProductStat.insertMany(dataProductStat);
-//     // Transaction.insertMany(dataTransaction);
-//     // User.insertMany(dataUser);
-//   })
-//   .catch((error) => console.log(`${error} did not connect`));
-
-//POSTGRES SETUP
-
-const { Client } = pg
-const {
-POSTGRES_HOST,
-POSTGRES_DB,
-POSTGRES_USER,
-POSTGRES_PASSWORD
-} = process.env
-
-export const client = new Client({
-    host: POSTGRES_HOST,
-    database: POSTGRES_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD
-});
-
-client
-  .connect()
-  .then(()=>{
-    console.log("[POSTGRES] Postgres is Connected");
-  })
-  .catch((error) => console.log(`${error} did not connect`));

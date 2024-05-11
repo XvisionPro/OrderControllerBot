@@ -1,6 +1,6 @@
 import Product from "../models/Product.js";
 import ProductStat from "../models/ProductStat.js";
-import User from "../models/User.js";
+import Customer from "../models/Customer.js";
 import Transaction from "../models/Transaction.js";
 import getCountryIso3 from "country-iso-2-to-3";
 

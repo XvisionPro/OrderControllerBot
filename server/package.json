@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon index.js localhost 8080",
     "migrate": "node-pg-migrate"
   },
   "keywords": [],
@@ -24,7 +24,10 @@
     "mongoose": "^6.7.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
-    "pg": "^8.11.5"
+    "pg": "^8.11.5",
+    "pg-hstore": "^2.3.4",
+    "pg-models": "^1.0.7",
+    "sequelize": "^6.37.3"
   },
   "devDependencies": {
     "node-pg-migrate": "^7.3.2"

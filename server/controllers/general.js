@@ -1,12 +1,16 @@
-import User from "../models/User.js";
+import Customer from "../models/Customer.js";
 import OverallStat from "../models/OverallStat.js";
 import Transaction from "../models/Transaction.js";
 
-export const getUser = async (req, res) => {
+export const getCustomer = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
-    res.status(200).json(user);
+    const customer = await Customer.findAll({
+      where: {
+        telegram_id: id,
+      }
+    });
+    res.status(200).json(customer);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
