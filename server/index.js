@@ -13,6 +13,7 @@ import sequelize from "./database.js";
 
 // data imports
 import Customer from "./models/Customer.js";
+import Service from "./models/Service.js";
 import Product from "./models/Product.js";
 import ProductStat from "./models/ProductStat.js";
 import Transaction from "./models/Transaction.js";

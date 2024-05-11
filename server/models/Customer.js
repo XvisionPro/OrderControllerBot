@@ -14,7 +14,7 @@ const Customer = sequelize.define(
     },
     telegram_id: {
       type: DataTypes.BIGINT,
-      allowNull: true,
+      allowNull: false,
       unique: true,
     },
     first_name: {

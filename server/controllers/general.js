@@ -1,5 +1,6 @@
 import Customer from "../models/Customer.js";
 import OverallStat from "../models/OverallStat.js";
+import Service from "../models/Service.js";
 import Transaction from "../models/Transaction.js";
 
 export const getCustomer = async (req, res) => {
@@ -7,7 +8,7 @@ export const getCustomer = async (req, res) => {
     const { id } = req.params;
     const customer = await Customer.findAll({
       where: {
-        telegram_id: id,
+        id: id,
       }
     });
     res.status(200).json(customer);
@@ -16,6 +17,19 @@ export const getCustomer = async (req, res) => {
   }
 };
 
+export const getService = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const service = await Service.findAll({
+      where: {
+        id: id,
+      }
+    });
+    res.status(200).json(service);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 export const getDashboardStats = async (req, res) => {
   try {
     // hardcoded values
