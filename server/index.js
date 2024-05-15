@@ -41,8 +41,6 @@ app.use("/customer", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
-app.listen(3000);
+app.listen(8080);
 
-Order.belongsTo(Customer);
-Order.belongsTo(Service);
 

@@ -11,42 +11,29 @@ const Customers = () => {
 
   const columns = [
     {
-      field: "_id",
+      field: "id",
       headerName: "ID",
       flex: 1,
     },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 0.5,
-    },
-    {
-      field: "email",
-      headerName: "Email",
+      field: "telegram_id",
+      headerName: "TelegramID",
       flex: 1,
     },
     {
-      field: "phoneNumber",
-      headerName: "Phone Number",
-      flex: 0.5,
-      renderCell: (params) => {
-        return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1)$2-$3");
-      },
-    },
-    {
-      field: "country",
-      headerName: "Country",
-      flex: 0.4,
-    },
-    {
-      field: "occupation",
-      headerName: "Occupation",
+      field: "first_name",
+      headerName: "First Name",
       flex: 1,
     },
     {
-      field: "role",
-      headerName: "Role",
-      flex: 0.5,
+      field: "last_name",
+      headerName: "Last Name",
+      flex: 1,
+    },
+    {
+      field: "username",
+      headerName: "Username",
+      flex: 1,
     },
   ];
 
@@ -83,7 +70,7 @@ const Customers = () => {
       >
         <DataGrid
           loading={isLoading || !data}
-          getRowId={(row) => row._id}
+          getRowId={(row) => row.id}
           rows={data || []}
           columns={columns}
         />

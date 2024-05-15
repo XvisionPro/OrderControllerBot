@@ -43,9 +43,9 @@ const navItems = [
     route: "Customers",
   },
   {
-    text: "Транзакции",
+    text: "Заказы",
     icon: <ReceiptLongOutlined />,
-    route: "Transactions",
+    route: "Orders",
   },
   {
     text: "Пользователи",

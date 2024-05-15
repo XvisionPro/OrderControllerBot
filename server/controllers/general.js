@@ -30,7 +30,7 @@ export const getService = async (req, res) => {
   }
 };
 
-export const getOrder = async (req, res) => { //не работает
+export const getOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const order = await Order.findAll({
@@ -38,6 +38,33 @@ export const getOrder = async (req, res) => { //не работает
         id: id,
       }
     });
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getAllService = async (req, res) => {
+  try {
+    const order = await Service.findAll();
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getAllCustomers = async (req, res) => {
+  try {
+    const order = await Customer.findAll();
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const order = await Order.findAll();
     res.status(200).json(order);
   } catch (error) {
     res.status(404).json({ message: error.message });

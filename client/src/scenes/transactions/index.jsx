@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetTransactionsQuery } from "state/api";
+import { useGetOrdersQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
@@ -15,47 +15,42 @@ const Transactions = () => {
   const [search, setSearch] = useState("");
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetTransactionsQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
+  const { data, isLoading } = useGetOrdersQuery();
+
+  console.log("Orders Data:", data);
 
   const columns = [
     {
-      field: "_id",
-      headerName: "ID",
+      field: "id",
+      headerName: "ID заказа",
       flex: 1,
     },
     {
-      field: "userId",
-      headerName: "User ID",
+      field: "client_id",
+      headerName: "ID клиента",
       flex: 1,
     },
     {
-      field: "createdAt",
-      headerName: "CreatedAt",
+      field: "service_id",
+      headerName: "ID услуги", //TODO: заменить айдишник на услугу в запросе на бэке
       flex: 1,
     },
     {
-      field: "products",
-      headerName: "# of Products",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params) => params.value.length,
+      field: "order_date",
+      headerName: "Дата заказа",
+      flex: 1.5,
+      sortable: true,
     },
     {
-      field: "cost",
-      headerName: "Cost",
+      field: "status",
+      headerName: "Статус заказа",
       flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
   ];
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
+      <Header title="ЗАКАЗЫ" subtitle="Таблица заказов" />
       <Box
         height="80vh"
         sx={{
@@ -85,8 +80,8 @@ const Transactions = () => {
       >
         <DataGrid
           loading={isLoading || !data}
-          getRowId={(row) => row._id}
-          rows={(data && data.transactions) || []}
+          getRowId={(row) => row.id}
+          rows={(data) || []}
           columns={columns}
           rowCount={(data && data.total) || 0}
           rowsPerPageOptions={[20, 50, 100]}
@@ -94,7 +89,7 @@ const Transactions = () => {
           page={page}
           pageSize={pageSize}
           paginationMode="server"
-          sortingMode="server"
+          sortingMode="client"
           onPageChange={(newPage) => setPage(newPage)}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           onSortModelChange={(newSortModel) => setSort(...newSortModel)}
