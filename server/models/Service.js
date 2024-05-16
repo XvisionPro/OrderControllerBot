@@ -39,17 +39,14 @@ const Service = sequelize.define(
 
 // `sequelize.define` возвращает модель
 Service.sync();
-Service.hasMany(Order, {
-  foreignKey: 'service_id'
-})
 console.log(Service === sequelize.models.Service) // true
 
 
 // test
 // const minet = await Service.create({
 //   name: 'Минет',
-//   description: 'Глубокий',
-//   price: 2000.00,
+//   description: 'Поверхностный',
+//   price: 1000.00,
 //   image_path: '/uploads/minet.svg',
 // })
 export default Service

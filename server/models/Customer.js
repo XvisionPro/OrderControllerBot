@@ -40,9 +40,10 @@ const Customer = sequelize.define(
 
 // `sequelize.define` возвращает модель
 Customer.sync();
-Customer.hasMany(Order,{
-  foreignKey: 'service_id'
-});
+// const customer = await Customer.create({
+//   telegram_id:  1,
+//   username: '4len',
+// })
 console.log(Customer === sequelize.models.Customer) // true
 
 

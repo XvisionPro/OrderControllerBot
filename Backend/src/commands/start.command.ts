@@ -20,6 +20,8 @@ export class StartCommand extends Command {
             const firstName = user?.first_name ?? ''; 
             const lastName = user?.last_name ?? '';
             const username = user?.username ?? '';
+            const createdAt = new Date().toJSON();
+            const updatedAt = createdAt;
 
             if (!telegramId) {
                 ctx.reply("Could not retrieve your Telegram ID.");
@@ -31,8 +33,8 @@ export class StartCommand extends Command {
 
             if (!existingUser) {
                 // Создаём, если не существует
-                await this.db.insertNewUser(telegramId, firstName, lastName, username);
-                existingUser = { id: telegramId, firstName, lastName, username };
+                await this.db.insertNewUser(telegramId, firstName, lastName, username, createdAt, updatedAt);
+                existingUser = { id: telegramId, firstName, lastName, username, createdAt,updatedAt };
             } else {
                 // Обновляем инфу, если существует
                 await this.db.updateUser(telegramId, firstName, lastName, username);

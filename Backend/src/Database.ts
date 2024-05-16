@@ -54,9 +54,9 @@ export class DataBase {
         }
     }
 
-    async insertNewUser(telegramId: number, firstName: string, lastName: string, username: string): Promise<void> {
+    async insertNewUser(telegramId: number, firstName: string, lastName: string, username: string, createdAt: string, updatedAt: string): Promise<void> {
         try {
-            await this.query(`INSERT INTO "Заказчик" (telegram_id, first_name, last_name, username) VALUES ($1, $2, $3, $4)`, [telegramId, firstName, lastName, username]);
+            await this.query(`INSERT INTO "Заказчик" (telegram_id, first_name, last_name, username, createdAt, updatedAt) VALUES ($1, $2, $3, $4, $5, $6)`, [telegramId, firstName, lastName, username, createdAt, updatedAt]);
         } catch (error) {
             console.error('Не получилось добавить заказчика в БД:', error);
             throw error;

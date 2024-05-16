@@ -44,3 +44,21 @@ app.use("/sales", salesRoutes);
 app.listen(8080);
 
 
+Customer.hasMany(Order, {
+  foreignKey: 'client_id'
+});
+Service.hasMany(Order, {
+  foreignKey: 'service_id'
+})
+// Order.belongsTo(Service);
+// Order.belongsTo(Customer);
+
+sequelize.sync();
+// const order = await Order.create({
+//   client_id: 1,
+//   service_id: 2,
+// })
+
+
+
+
