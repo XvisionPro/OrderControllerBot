@@ -2,14 +2,14 @@ import { Markup, Telegraf } from "telegraf";
 import { Command } from "./command.class";
 import { IBotContext } from "../context/context.interface";
 import { DataBase } from "../Database";
-const sharp = require('sharp');
 
 export class StartCommand extends Command {
     private db: DataBase;
 
     constructor(bot: Telegraf<IBotContext>) {
         super(bot);
-        this.db = new DataBase();;
+        this.db = new DataBase();
+        console.log('Constructor called');
     }
 
     async handle(): Promise<void> {
@@ -20,9 +20,9 @@ export class StartCommand extends Command {
             const firstName = user?.first_name ?? ''; 
             const lastName = user?.last_name ?? '';
             const username = user?.username ?? '';
-            const createdAt = new Date().toJSON();
-            const updatedAt = createdAt;
-
+            const createTime = new Date();
+            const updateTime = createTime;
+            console.log(createTime);
             if (!telegramId) {
                 ctx.reply("Could not retrieve your Telegram ID.");
                 return;
@@ -33,8 +33,8 @@ export class StartCommand extends Command {
 
             if (!existingUser) {
                 // Создаём, если не существует
-                await this.db.insertNewUser(telegramId, firstName, lastName, username, createdAt, updatedAt);
-                existingUser = { id: telegramId, firstName, lastName, username, createdAt,updatedAt };
+                await this.db.insertNewUser(telegramId, firstName, lastName, username, createTime, updateTime);
+                existingUser = { id: telegramId, firstName, lastName, username, createTime, updateTime};
             } else {
                 // Обновляем инфу, если существует
                 await this.db.updateUser(telegramId, firstName, lastName, username);

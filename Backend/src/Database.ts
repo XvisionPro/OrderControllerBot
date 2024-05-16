@@ -54,9 +54,10 @@ export class DataBase {
         }
     }
 
-    async insertNewUser(telegramId: number, firstName: string, lastName: string, username: string, createdAt: string, updatedAt: string): Promise<void> {
+    async insertNewUser(telegramId: number, firstName: string, lastName: string, username: string, createTime: Date, updateTime: Date): Promise<void> {
         try {
-            await this.query(`INSERT INTO "Заказчик" (telegram_id, first_name, last_name, username, createdAt, updatedAt) VALUES ($1, $2, $3, $4, $5, $6)`, [telegramId, firstName, lastName, username, createdAt, updatedAt]);
+            // Исправление названия столбца с "createdat" на "createdAt"
+            await this.query(`INSERT INTO "Заказчик" (telegram_id, first_name, last_name, username, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6)`, [telegramId, firstName, lastName, username, createTime.toISOString(), updateTime.toISOString()]);
         } catch (error) {
             console.error('Не получилось добавить заказчика в БД:', error);
             throw error;
@@ -78,9 +79,9 @@ export class DataBase {
             if (!clientExists.rows.length) {
                 await this.query(`INSERT INTO "Заказчик" (id) VALUES ($1)`, [clientId]);
             } else {
-                clientId = clientExists.rows[0].id;
+                const clientId = clientExists.rows[0].id;
             }
-            const insertOrderResult = await this.query(`INSERT INTO "Заказ" (client_id, service_id, status) VALUES ($1, $2, 'new') RETURNING id`, [clientId, serviceId]);
+            const insertOrderResult = await this.query(`INSERT INTO "Заказ" (client_id, service_id, order_date, status, "createdAt", "updatedAt") VALUES ($1, $2, $3, 'new', $4, $5) RETURNING id`, [clientId, serviceId, new Date().toISOString(), new Date().toISOString(), new Date().toISOString()]);
             return insertOrderResult.rows[0].id;
         } catch (error) {
             console.error('Не получилось добавить заказ:', error);
