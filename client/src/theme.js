@@ -134,6 +134,10 @@ export const themeSettings = (mode) => {
         fontFamily: ["Inter", "sans-serif"].join(","),
         fontSize: 14,
       },
+      a: {
+        fontFamily: ["Inter", "sans-serif"].join(","),
+        fontSize: 14,
+      }
     },
   };
 };

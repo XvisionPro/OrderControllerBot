@@ -13,6 +13,7 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
+    "UpdateStatus",
   ],
   endpoints: (build) => ({
     getUser: build.query({
@@ -51,6 +52,14 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+    putUpdateStatus: build.query({
+      query: (id) => ({
+            url: `general/orders/change/${id}`,
+            method: "PUT",
+            params: { id },
+          }),
+      providesTags: ["UpdateStatus"],
+    })
   }),
 });
 
@@ -64,6 +73,7 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+  usePutUpdateStatus,
 } = api;
 
 // getOrders: build.query({

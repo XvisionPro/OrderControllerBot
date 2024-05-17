@@ -106,7 +106,28 @@ export const getDashboardStats = async(req, res) => {
   }
 }
 
+export const updateOrder = async(req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findByPk(id);
+    await order.update({ status: "completed" });
+    res.status(200).json({message: 'Заменено.'});
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
+}
 
+export const deleteOrder = async(req, res) => {
+  try {
+    const { id } = req.params;
+    await Order.destroy({
+      where: { id: id }
+    })
+    res.status(200).json({message: `ID ${id} удалён.`});
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
+}
 // export const getDashboardStats = async (req, res) => {
 //   try {
 //     // hardcoded values

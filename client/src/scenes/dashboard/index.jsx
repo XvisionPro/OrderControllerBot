@@ -173,7 +173,7 @@ const Dashboard = () => {
 
         {/* ROW 2 */}
         <Box
-          gridColumn="span 8"
+          gridColumn="span 12"
           gridRow="span 3"
           sx={{
             "& .MuiDataGrid-root": {
@@ -209,7 +209,7 @@ const Dashboard = () => {
             pagination
           />
         </Box>
-        <Box
+        {/* <Box
           gridColumn="span 4"
           gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
@@ -227,7 +227,7 @@ const Dashboard = () => {
           >
             Разбивка реальных состояний и информация по категориям о доходах сделанных за этот год, и общий объем продаж.
           </Typography>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

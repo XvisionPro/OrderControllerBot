@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import * as React from 'react';
 import { Box, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { useGetOrdersQuery } from "state/api";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useGetOrdersQuery, usePutUpdateStatus } from "state/api";
+import { useDispatch } from 'react-redux';
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
@@ -9,15 +11,70 @@ const Transactions = () => {
   const theme = useTheme();
 
   // values to be sent to the backend
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(20);
+  const [sort, setSort] = React.useState({});
+  const [search, setSearch] = React.useState("");
 
-  const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetOrdersQuery();
+  const [searchInput, setSearchInput] = React.useState("");
+  const { data, isLoading , refetch} = useGetOrdersQuery();
 
-  console.log("Orders Data:", data);
+  const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch();
+
+
+  const changeStatus = React.useCallback(
+    (id) => () => {
+      setLoading(true);
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      };
+      fetch(`http://localhost:8080/general/orders/change/${id}`, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.status || response.statusText);
+        }
+        const isJson = response.headers.get("content-type")?.includes("application/json");
+        return isJson ? response.json() : null;
+      })
+      .then(() => {
+        refetch();
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      });
+    },
+    [],
+  );
+  const deleteOrder = React.useCallback(
+    (id) => () => {
+      setLoading(true);
+      const requestOptions = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      };
+      fetch(`http://localhost:8080/general/orders/delete/${id}`, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.status || response.statusText);
+        }
+        const isJson = response.headers.get("content-type")?.includes("application/json");
+        return isJson ? response.json() : null;
+      })
+      .then(() => {
+        console.log('Удалил крч, иди нахуй', id);
+        refetch();
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      });
+    }
+  );
 
   const columns = [
     {
@@ -40,11 +97,42 @@ const Transactions = () => {
       headerName: "Дата заказа",
       flex: 1.5,
       sortable: true,
+      type: 'dateTime',
+      valueGetter: ({value}) => {
+        console.log(value);
+        return new Date(value);
+      },
     },
     {
       field: "status",
       headerName: "Статус заказа",
       flex: 1,
+      valueGetter: (({value})=>{
+        if(value == "new"){
+          return "Новый"
+        }
+        else{
+          return "Выполнен"
+        }
+      }),
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 80,
+      getActions: (params) => [
+            <GridActionsCellItem
+            label="Изменить статус"
+            onClick={changeStatus(params.id)}
+            showInMenu
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Удалить"
+            onClick={deleteOrder(params.id)}
+            showInMenu
+          />,
+      ]
     },
   ];
 
@@ -86,6 +174,8 @@ const Transactions = () => {
           rowCount={(data && data.total) || 0}
           rowsPerPageOptions={[20, 50, 100]}
           pagination
+          checkboxSelection={false}
+          disableMultipleRowSelection={true}
           page={page}
           pageSize={pageSize}
           paginationMode="server"
