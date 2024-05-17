@@ -27,3 +27,17 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #21295c;
 }
+
+.dashboard-header {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.dashboard-link {
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.dashboard-link:hover {
+  color:#7a7f9d;
+}

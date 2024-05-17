@@ -1,6 +1,9 @@
 import Customer from "../models/Customer.js";
 import Order from "../models/Order.js";
 import Service from "../models/Service.js";
+import {Op} from 'sequelize';
+import moment from "moment";
+import sequelize from "sequelize";
 
 export const getCustomer = async (req, res) => {
   try {
@@ -70,6 +73,38 @@ export const getAllOrders = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const getDashboardStats = async(req, res) => {
+  try {
+    const orders = await Order.findAll();
+    const orderCount =orders.length;
+    const serviceCount = (await Service.findAll()).length;
+    const customerCount = (await Customer.findAll()).length;
+
+    const START = new Date();
+    START.setHours(0, 0, 0, 0);
+    const NOW = new Date();
+    const ordersToday = await Order.findAll({
+      where: {
+        order_date: {
+          [Op.between]: [START.toISOString(), NOW.toISOString()]
+      }
+    }
+    });
+    const countToday = ordersToday.length;
+
+    res.status(200).json({
+      orderCount,
+      serviceCount,
+      customerCount,
+      ordersToday,
+      countToday,
+    });
+    
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
+}
 
 
 // export const getDashboardStats = async (req, res) => {

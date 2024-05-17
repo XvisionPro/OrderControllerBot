@@ -1,5 +1,5 @@
 import express from "express";
-import { getCustomer, getOrder, getService, getAllService, getAllCustomers, getAllOrders } from "../controllers/general.js";
+import { getCustomer, getOrder, getService, getAllService, getAllCustomers, getAllOrders, getDashboardStats } from "../controllers/general.js";
 
 const router = express.Router();
 
@@ -10,6 +10,6 @@ router.get("/order/:id", getOrder);
 router.get("/services", getAllService);
 router.get("/customers", getAllCustomers);
 router.get("/orders", getAllOrders);
-// router.get("/dashboard", getDashboardStats);
+router.get("/dashboard", getDashboardStats);
 
 export default router;

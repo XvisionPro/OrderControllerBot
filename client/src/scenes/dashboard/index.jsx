@@ -18,7 +18,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import BreakdownChart from "components/BreakdownChart";
 import OverviewChart from "components/OverviewChart";
-import { useGetDashboardQuery } from "state/api";
+import { useGetDashboardQuery, useGetOrdersQuery } from "state/api";
 import StatBox from "components/StatBox";
 
 const Dashboard = () => {
@@ -28,32 +28,43 @@ const Dashboard = () => {
 
   const columns = [
     {
-      field: "_id",
-      headerName: "ID",
+      field: "id",
+      headerName: "ID заказа",
       flex: 1,
     },
     {
-      field: "userId",
-      headerName: "ID пользователя",
+      field: "client_id",
+      headerName: "ID клиента",
       flex: 1,
     },
     {
-      field: "createdAt",
-      headerName: "Создан",
+      field: "service_id",
+      headerName: "ID услуги",
       flex: 1,
     },
     {
-      field: "products",
-      headerName: "Услуга",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params) => params.value.length,
+      field: "order_date",
+      headerName: "Дата заказа",
+      flex: 1.5,
+      sortable: true,
+      type: 'dateTime',
+      valueGetter: ({value}) => {
+        console.log(value);
+        return new Date(value);
+      },
     },
     {
-      field: "cost",
-      headerName: "Стоимость",
+      field: "status",
+      headerName: "Статус заказа",
       flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
+      valueGetter: (({value})=>{
+        if(value == "new"){
+          return "Новый"
+        }
+        else{
+          return "Выполнен"
+        }
+      }),
     },
   ];
 
@@ -90,9 +101,9 @@ const Dashboard = () => {
       >
         {/* ROW 1 */}
         <StatBox
-          title="Всего покупателей"
-          value={data && data.totalCustomers}
-          increase="+14%"
+          title="Всего пользователей"
+          value={data && data.customerCount}
+          increase="+XX%"
           description="По сравнению с прошлым месяцем"
           icon={
             <Email
@@ -101,9 +112,9 @@ const Dashboard = () => {
           }
         />
         <StatBox
-          title="Продажи за сегодня"
-          value={data && data.todayStats.totalSales}
-          increase="+21%"
+          title="Заказов сегодня"
+          value={data && data.countToday}
+          increase="+XX%"
           description="По сравнению со вчера"
           icon={
             <PointOfSale
@@ -118,12 +129,29 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-          <OverviewChart view="sales" isDashboard={true} />
+          <Typography 
+            variant="h2"
+            color={theme.palette.secondary[100]}
+            fontWeight="bold"
+            sx={{ mb: "5px" }}
+          >
+            Ссылка на телеграм-бота:
+          </Typography>
+          <Typography 
+            variant="h3"
+            color={theme.palette.secondary[100]}
+            fontWeight="bold"
+            sx={{ mb: "5px" }}
+          >
+            <a className="dashboard-link" href="https://t.me/DevAlphaOrderBot">t.me/DevAlphaOrderBot</a>
+          </Typography>
+          
+          {/* <OverviewChart view="sales" isDashboard={true} /> */}
         </Box>
         <StatBox
-          title="Продажи за месяц"
-          value={data && data.thisMonthStats.totalSales}
-          increase="+5%"
+          title="Всего заказов"
+          value={data && data.orderCount}
+          increase="+XX%"
           description="По сравнению с прошлым месяцем"
           icon={
             <PersonAdd
@@ -132,9 +160,9 @@ const Dashboard = () => {
           }
         />
         <StatBox
-          title="Продажи за год"
-          value={data && data.yearlySalesTotal}
-          increase="+43%"
+          title="Всего услуг"
+          value={data && data.serviceCount}
+          increase="+XX%"
           description="По сравнению с прошлым годои"
           icon={
             <Traffic
@@ -175,9 +203,10 @@ const Dashboard = () => {
         >
           <DataGrid
             loading={isLoading || !data}
-            getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
+            getRowId={(row) => row.id}
+            rows={(data && data.ordersToday) || []}   
             columns={columns}
+            pagination
           />
         </Box>
         <Box
