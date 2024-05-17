@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize"
 import sequelize from "../database.js"
-import Order from "./Order.js";
-
 
 const Service = sequelize.define(
   'Услуга',
@@ -37,17 +35,8 @@ const Service = sequelize.define(
   }
 )
 
-// `sequelize.define` возвращает модель
 Service.sync();
 console.log(Service === sequelize.models.Service) // true
 
-
-// test
-// const minet = await Service.create({
-//   name: 'Минет',
-//   description: 'Поверхностный',
-//   price: 1000.00,
-//   image_path: '/uploads/minet.svg',
-// })
 export default Service
 

@@ -54,7 +54,7 @@ export class OrderCommand extends Command {
                 Promise.all(serviceNamesPromises).then((serviceNamesResults) => {
                     let message = "<b>История заказов:</b>\n";
                     serviceNamesResults.forEach((result, index) => {
-                        message += `\n<b>Заказ ${totalOrders - orders[index].id + 1}:</b>\n`;
+                        message += `\n<b>Заказ ${orders[index].id}:</b>\n`;
                         message += result;
                         const orderDate = new Date(orders[index].order_date);
                         const formattedDate = orderDate.toLocaleString('ru-RU', {

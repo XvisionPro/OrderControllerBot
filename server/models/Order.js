@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize"
 import sequelize from "../database.js"
-import Customer from "./Customer.js";
-
 
 const Order = sequelize.define(
   'Заказ',
@@ -38,15 +36,7 @@ const Order = sequelize.define(
   }
 )
 
-// `sequelize.define` возвращает модель
 Order.sync();
-// const order = await Order.create({
-//   client_id: 1,
-//   service_id: 100,
-// })
-// console.log(Order === sequelize.models.Order) // true
 
-
-// test
 export default Order
 

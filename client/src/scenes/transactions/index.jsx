@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Box, useTheme } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useGetOrdersQuery, usePutUpdateStatus } from "state/api";
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import { useGetOrdersQuery} from "state/api";
 import { useDispatch } from 'react-redux';
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
@@ -10,7 +11,6 @@ import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 const Transactions = () => {
   const theme = useTheme();
 
-  // values to be sent to the backend
   const [page, setPage] = React.useState(0);
   const [pageSize, setPageSize] = React.useState(20);
   const [sort, setSort] = React.useState({});
@@ -20,8 +20,6 @@ const Transactions = () => {
   const { data, isLoading , refetch} = useGetOrdersQuery();
 
   const [loading, setLoading] = React.useState(false);
-  const dispatch = useDispatch();
-
 
   const changeStatus = React.useCallback(
     (id) => () => {
@@ -89,7 +87,7 @@ const Transactions = () => {
     },
     {
       field: "service_id",
-      headerName: "ID услуги", //TODO: заменить айдишник на услугу в запросе на бэке
+      headerName: "ID услуги",
       flex: 1,
     },
     {
@@ -122,15 +120,16 @@ const Transactions = () => {
       width: 80,
       getActions: (params) => [
             <GridActionsCellItem
+            icon={<BorderColorIcon/>}
             label="Изменить статус"
             onClick={changeStatus(params.id)}
-            showInMenu
+            // showInMenu
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Удалить"
             onClick={deleteOrder(params.id)}
-            showInMenu
+            // showInMenu
           />,
       ]
     },
@@ -171,14 +170,13 @@ const Transactions = () => {
           getRowId={(row) => row.id}
           rows={(data) || []}
           columns={columns}
-          rowCount={(data && data.total) || 0}
-          rowsPerPageOptions={[20, 50, 100]}
+          rowCount={(data && data.length) || 0}
           pagination
+          rowsPerPageOptions={[20, 50, 100]}
           checkboxSelection={false}
           disableMultipleRowSelection={true}
           page={page}
           pageSize={pageSize}
-          paginationMode="server"
           sortingMode="client"
           onPageChange={(newPage) => setPage(newPage)}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

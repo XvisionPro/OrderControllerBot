@@ -2,7 +2,7 @@ import React from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
 import {
-  // DownloadOutlined,
+
   Email,
   PointOfSale,
   PersonAdd,
@@ -10,15 +10,12 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
-  // Button,
   Typography,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import BreakdownChart from "components/BreakdownChart";
-import OverviewChart from "components/OverviewChart";
-import { useGetDashboardQuery, useGetOrdersQuery } from "state/api";
+import { useGetDashboardQuery } from "state/api";
 import StatBox from "components/StatBox";
 
 const Dashboard = () => {
@@ -72,21 +69,6 @@ const Dashboard = () => {
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
         <Header title="Панель управления" subtitle="Добро пожаловать!" />
-
-        <Box>
-          {/* <Button
-            sx={{
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.background.alt,
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-          >
-            <DownloadOutlined sx={{ mr: "10px" }} />
-            Download Reports
-          </Button> */}
-        </Box>
       </FlexBetween>
 
       <Box
@@ -143,10 +125,8 @@ const Dashboard = () => {
             fontWeight="bold"
             sx={{ mb: "5px" }}
           >
-            <a className="dashboard-link" href="https://t.me/DevAlphaOrderBot">t.me/DevAlphaOrderBot</a>
+            <a className="dashboard-link" target="_blank" href="https://t.me/DevAlphaOrderBot">t.me/DevAlphaOrderBot</a>
           </Typography>
-          
-          {/* <OverviewChart view="sales" isDashboard={true} /> */}
         </Box>
         <StatBox
           title="Всего заказов"
@@ -209,25 +189,6 @@ const Dashboard = () => {
             pagination
           />
         </Box>
-        {/* <Box
-          gridColumn="span 4"
-          gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Продажи по категориям
-          </Typography>
-          <BreakdownChart isDashboard={true} />
-          <Typography
-            p="0 0.6rem"
-            fontSize="0.8rem"
-            sx={{ color: theme.palette.secondary[200] }}
-          >
-            Разбивка реальных состояний и информация по категориям о доходах сделанных за этот год, и общий объем продаж.
-          </Typography>
-        </Box> */}
       </Box>
     </Box>
   );
