@@ -19,9 +19,8 @@ import {
   HomeOutlined,
   Groups2Outlined,
   ReceiptLongOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-} from "@mui/icons-material";
+} 
+from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
@@ -46,20 +45,6 @@ const navItems = [
     text: "Заказы",
     icon: <ReceiptLongOutlined />,
     route: "Orders",
-  },
-  {
-    text: "Пользователи",
-    icon: null,
-  },
-  {
-    text: "Администраторы",
-    icon: <AdminPanelSettingsOutlined />,
-    route: "Admin",
-  },
-  {
-    text: "Настройки",
-    icon: <TrendingUpOutlined />,
-    route: "Performance",
   },
 ];
 

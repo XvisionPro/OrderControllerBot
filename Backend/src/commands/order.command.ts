@@ -33,43 +33,50 @@ export class OrderCommand extends Command {
         });
 
         this.bot.hears('История заказов', async (ctx) => {
-            const userId = ctx.from?.id; // Получаем ID пользователя из контекста
-            if (!userId) {
-                ctx.reply("Не удалось получить ID пользователя.");
+            if (!ctx.from) {
+                console.error('Не получил user');
                 return;
             }
-            
-            const page = 1
+            const userId = ctx.from.id;
+            const page = 1;
 
             try {
-                // Получаем историю заказов для пользователя с пагинацией
                 const { orders, totalOrders } = await this.db.showOrdersHistory(userId, page);
-                // Форматируем результаты для отправки пользователю
-                let message = "<b>История заказов:</b>\n";
-                orders.forEach((order, index) => {
-                    message += `\n<b>Заказ ${totalOrders - order.id + 1}:</b>\n`;
-                    message += `Услуга: ${order.service_id}\n`;
-                    const orderDate = new Date(order.order_date);
-                    const formattedDate = orderDate.toLocaleString('ru-RU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    message += `Дата заказа: ${formattedDate}\n`;
+                const totalPages = Math.ceil(totalOrders / pageSize);
+
+                // Создаем массив промисов для получения названий услуг
+                const serviceNamesPromises = orders.map(async (order) => {
+                    const serviceName = await this.db.getNameOfService(order.service_id);
+                    return `Услуга: ${serviceName}\n`;
                 });
-                
-                // Вычисляем общее количество страниц
-                const totalPages = Math.ceil(totalOrders / pageSize);   
-                const pagination = paginationKeyboard(page, totalPages);
-                // Используем pagination для отправки сообщения с клавиатурой
-                ctx.replyWithHTML(message, {reply_markup: {inline_keyboard:[pagination]}});
-            } 
-            catch (error) 
-            {
-                console.error('Ошибка при получении истории заказов:', error);
-                ctx.reply("Произошла ошибка при получении истории заказов.");
+
+                // Ожидаем завершения всех промисов
+                Promise.all(serviceNamesPromises).then((serviceNamesResults) => {
+                    let message = "<b>История заказов:</b>\n";
+                    serviceNamesResults.forEach((result, index) => {
+                        message += `\n<b>Заказ ${totalOrders - orders[index].id + 1}:</b>\n`;
+                        message += result;
+                        const orderDate = new Date(orders[index].order_date);
+                        const formattedDate = orderDate.toLocaleString('ru-RU', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        message += `Дата заказа: ${formattedDate}\n`;
+                    });
+
+                    // Создаем кнопки пагинации
+                    const pagination = paginationKeyboard(page, totalPages);
+
+                    // Отправляем итоговое сообщение с пагинацией
+                    ctx.replyWithHTML(message, {reply_markup: {inline_keyboard:[pagination]}});
+                }).catch(error => {
+                    console.error('Ошибка при формировании истории заказов:', error);
+                });
+            } catch (error) {
+                console.error('Ошибка при обработке запроса пагинации:', error);
             }
         });
 

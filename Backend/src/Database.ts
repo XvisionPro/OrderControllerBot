@@ -93,7 +93,7 @@ export class DataBase {
         try {
             const clientExists = await this.query(`SELECT id FROM "Заказчик" WHERE telegram_id = $1`, [userId]);
             const clientId = clientExists.rows[0].id;
-            const result = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [clientId]);
+            const result = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [userId]);
             return parseInt(result.rows[0].count);
         } catch (error) {
             console.error('Не получилось подсчитать кол-во заказов:', error);
@@ -108,8 +108,8 @@ export class DataBase {
                 throw new Error("Клиент не найден.");
             }
             const clientId = clientExists.rows[0].id;
-            const orders = await this.query(`SELECT * FROM "Заказ" WHERE client_id = $1 ORDER BY order_date DESC LIMIT $2 OFFSET $3`, [clientId, pageSize, (page -  1) * pageSize]);
-            const totalOrdersResult = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [clientId]);
+            const orders = await this.query(`SELECT * FROM "Заказ" WHERE client_id = $1 ORDER BY order_date DESC LIMIT $2 OFFSET $3`, [userId, pageSize, (page -  1) * pageSize]);
+            const totalOrdersResult = await this.query(`SELECT COUNT(*) FROM "Заказ" WHERE client_id = $1`, [userId]);
             const totalOrders = parseInt(totalOrdersResult.rows[0].count,  10);
             return { orders: orders.rows, totalOrders };
         } catch (error) {
@@ -118,6 +118,21 @@ export class DataBase {
         }
     }
 
+    async getNameOfService(serviceId: number): Promise<string | null> {
+        try {
+            // Предполагаем, что у нас есть метод query для выполнения SQL-запросов
+            const serviceResult = await this.query(`SELECT name FROM Услуга WHERE id = $1`, [serviceId]);
+            if (serviceResult.rows.length > 0) {
+                return serviceResult.rows[0].name; // Возвращает название услуги
+            } else {
+                return null; // Если услуги с таким ID нет, возвращаем null
+            }
+        } catch (error) {
+            console.error('Ошибка при получении имени услуги:', error);
+            throw error;
+        }
+    }
+    
     async end(): Promise<void> {
         try {
             await this.client.end();

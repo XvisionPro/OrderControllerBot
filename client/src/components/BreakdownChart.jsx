@@ -7,7 +7,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
   const { data, isLoading } = useGetSalesQuery();
   const theme = useTheme();
 
-  if (!data || isLoading) return "Loading...";
+  if (!data || isLoading) return "Загрузка...";
 
   const colors = [
     theme.palette.secondary[500],

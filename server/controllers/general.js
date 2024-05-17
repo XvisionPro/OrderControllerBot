@@ -70,6 +70,8 @@ export const getAllOrders = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+
 // export const getDashboardStats = async (req, res) => {
 //   try {
 //     // hardcoded values

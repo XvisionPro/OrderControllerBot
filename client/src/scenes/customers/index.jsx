@@ -12,7 +12,7 @@ const Customers = () => {
   const columns = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: "ID заказчика",
       flex: 1,
     },
     {
@@ -22,24 +22,24 @@ const Customers = () => {
     },
     {
       field: "first_name",
-      headerName: "First Name",
+      headerName: "Имя",
       flex: 1,
     },
     {
       field: "last_name",
-      headerName: "Last Name",
+      headerName: "Фамилия",
       flex: 1,
     },
     {
       field: "username",
-      headerName: "Username",
+      headerName: "Юзернейм",
       flex: 1,
     },
   ];
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="CUSTOMERS" subtitle="List of Customers" />
+      <Header title="Заказчики" subtitle="Список заказчиков" />
       <Box
         mt="40px"
         height="75vh"

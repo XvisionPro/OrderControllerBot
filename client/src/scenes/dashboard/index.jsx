@@ -2,7 +2,7 @@ import React from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
 import {
-  DownloadOutlined,
+  // DownloadOutlined,
   Email,
   PointOfSale,
   PersonAdd,
@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
-  Button,
+  // Button,
   Typography,
   useTheme,
   useMediaQuery,
@@ -34,24 +34,24 @@ const Dashboard = () => {
     },
     {
       field: "userId",
-      headerName: "User ID",
+      headerName: "ID пользователя",
       flex: 1,
     },
     {
       field: "createdAt",
-      headerName: "CreatedAt",
+      headerName: "Создан",
       flex: 1,
     },
     {
       field: "products",
-      headerName: "# of Products",
+      headerName: "Услуга",
       flex: 0.5,
       sortable: false,
       renderCell: (params) => params.value.length,
     },
     {
       field: "cost",
-      headerName: "Cost",
+      headerName: "Стоимость",
       flex: 1,
       renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
@@ -60,10 +60,10 @@ const Dashboard = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="Панель управления" subtitle="Добро пожаловать!" />
 
         <Box>
-          <Button
+          {/* <Button
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -74,7 +74,7 @@ const Dashboard = () => {
           >
             <DownloadOutlined sx={{ mr: "10px" }} />
             Download Reports
-          </Button>
+          </Button> */}
         </Box>
       </FlexBetween>
 
@@ -90,10 +90,10 @@ const Dashboard = () => {
       >
         {/* ROW 1 */}
         <StatBox
-          title="Total Customers"
+          title="Всего покупателей"
           value={data && data.totalCustomers}
           increase="+14%"
-          description="Since last month"
+          description="По сравнению с прошлым месяцем"
           icon={
             <Email
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -101,10 +101,10 @@ const Dashboard = () => {
           }
         />
         <StatBox
-          title="Sales Today"
+          title="Продажи за сегодня"
           value={data && data.todayStats.totalSales}
           increase="+21%"
-          description="Since last month"
+          description="По сравнению со вчера"
           icon={
             <PointOfSale
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -121,10 +121,10 @@ const Dashboard = () => {
           <OverviewChart view="sales" isDashboard={true} />
         </Box>
         <StatBox
-          title="Monthly Sales"
+          title="Продажи за месяц"
           value={data && data.thisMonthStats.totalSales}
           increase="+5%"
-          description="Since last month"
+          description="По сравнению с прошлым месяцем"
           icon={
             <PersonAdd
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -132,10 +132,10 @@ const Dashboard = () => {
           }
         />
         <StatBox
-          title="Yearly Sales"
+          title="Продажи за год"
           value={data && data.yearlySalesTotal}
           increase="+43%"
-          description="Since last month"
+          description="По сравнению с прошлым годои"
           icon={
             <Traffic
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -188,7 +188,7 @@ const Dashboard = () => {
           borderRadius="0.55rem"
         >
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
+            Продажи по категориям
           </Typography>
           <BreakdownChart isDashboard={true} />
           <Typography
@@ -196,8 +196,7 @@ const Dashboard = () => {
             fontSize="0.8rem"
             sx={{ color: theme.palette.secondary[200] }}
           >
-            Breakdown of real states and information via category for revenue
-            made for this year and total sales.
+            Разбивка реальных состояний и информация по категориям о доходах сделанных за этот год, и общий объем продаж.
           </Typography>
         </Box>
       </Box>
